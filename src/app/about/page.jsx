@@ -48,7 +48,7 @@ function AboutMe(props) {
             </div>
             <div className="font-Header tracking-wide">
               <span className="text-gray-600">
-                Here are a few technologies I've been working with recently :
+                Here are a few technologies I have been been working with recently :
               </span>
             </div>
             <div className="font-Header tracking-wide flex flex-row space-x-16">

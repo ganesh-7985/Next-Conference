@@ -74,8 +74,8 @@ function NavBar() {
               <ul className="h-screen md:h-auto items-center gap-4 justify-center md:flex  ">
                 {
                     Links.map((link)=>(
-                        <li className={`pb-3 text-[16px] font-semibold py-2 md:px-6  items-center text-center border-b-2 md:border-b-0  hover:bg-[#7c51f0] hover:text-white border-purple-900 rounded-full  md:hover:text-white  md:hover:bg-[#7c51f0] ${pathName === link.path && "bg-[#7c51f0] text-white"}`}>
-                        <Link href={link.path} key={link.id} onClick={() => setNavbar(!navbar)}  >{link.title}</Link>
+                        <li key={link.id} className={`pb-3 text-[16px] font-semibold py-2 md:px-6  items-center text-center border-b-2 md:border-b-0  hover:bg-[#7c51f0] hover:text-white border-purple-900 rounded-full  md:hover:text-white  md:hover:bg-[#7c51f0] ${pathName === link.path && "bg-[#7c51f0] text-white"}`}>
+                        <Link href={link.path}  onClick={() => setNavbar(!navbar)}  >{link.title}</Link>
                         </li>
                     ))
                 }
