@@ -1,80 +1,186 @@
+"use client";
+import React, { useRef, useEffect } from "react";
 import Image from "next/image";
-const Contact = () => {
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+
+const svgVariant = {
+  visible: { x: 0, opacity: 1, transition: { duration: 1.5 } },
+  hidden: { opacity: 0, x: -20 },
+};
+const formVariant = {
+  visible: { x: 0, opacity: 1, transition: { duration: 1.5 } },
+  hidden: { opacity: 0, x: 10 },
+};
+
+const Form = () => {
+  const controls = useAnimation();
+
+  const [ref, inView] = useInView();
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    } else {
+      controls.start("hidden");
+    }
+  }, [controls, inView]);
+
+  const form = useRef();
+
+  const sendEmail = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form.current);
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+    };
+    console.log(data);
+
+    // try {
+    //   const response = await fetch("/api/sendMail", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(data),
+    //   });
+    //   if (response.ok) {
+    //     console.log("Email sent successfully");
+    //     // Optionally, reset form fields here
+    //   } else {
+    //     console.error("Failed to send email");
+    //   }
+    // } catch (error) {
+    //   console.error("Error sending email:", error);
+    // }
+  };
+
   return (
-    <div className="flex justify-around items-center">
-    <div className="flex flex-1 h-[800px] relative">
-     <Image src='/contact.jpg' alt="" fill className=" object-contain w-full h-full"/>
-     </div>
-      <div className="text-gray-600 body-font relative">
-        <div className="container px-5 py-24 mx-auto">
-          <div className="flex flex-col text-center w-full mb-12">
-            <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
-              Contact Us
-            </h1>
-            <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
-             write the description Here
-            </p>
-          </div>
-          <div className="lg:w-1/2 md:w-2/3 mx-auto">
-            <div className="flex flex-wrap -m-2">
-              <div className="p-2 w-1/2">
-                <div className="relative">
+    <>
+      <motion.section
+        className="flex flex-col md:flex-row"
+        id="contactus"
+        ref={ref}
+      >
+        <motion.div
+          className="w-full mt-4 md:w-1/2 h-1/2 flex justify-center items-center"
+          ref={ref}
+          animate={controls}
+          initial="hidden"
+          variants={svgVariant}
+        >
+          <Image
+            width={600}
+            height={600}
+            src="/contact.jpg"
+            alt="about"
+          />
+        </motion.div>
+
+        <motion.div
+          className="w-full md:w-1/2 h-1/2 grid justify-center p-2"
+          ref={ref}
+          animate={controls}
+          initial="hidden"
+          variants={formVariant}
+        >
+          <section className=" -900">
+            <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
+              <h2 className="mb-4 text-5xl tracking-tight font-extrabold text-center text-[#7c51f0]  ">
+                Send me a message!
+              </h2>
+              <p className="mb-8 lg:mb-16 font-light text-center text-gray-800   sm:text-xl">
+                Got a question or proposal, or just want to say hello? Go ahead.
+              </p>
+
+              <form
+                action="#"
+                ref={form}
+                onSubmit={sendEmail}
+                className="space-y-6"
+              >
+                <div>
                   <label
                     htmlFor="name"
-                    className="leading-7 text-sm text-gray-600"
+                    className="block mb-2 text-sm font-medium text-gray-700  "
                   >
-                    Name
+                    Your Name
                   </label>
+
                   <input
-                    type="text"
-                    id="name"
+                    type="name"
                     name="name"
-                    className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                    id="name"
+                    className=" shadow-sm bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  white "
+                    placeholder="name"
+                    required
                   />
                 </div>
-              </div>
-              <div className="p-2 w-1/2">
-                <div className="relative">
+                <div>
                   <label
                     htmlFor="email"
-                    className="leading-7 text-sm text-gray-600"
+                    className="block mb-2 text-sm font-medium text-gray-700  "
                   >
-                    Email
+                    Your email
                   </label>
+
                   <input
                     type="email"
-                    id="email"
                     name="email"
-                    className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                    id="email"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5  white "
+                    placeholder="name@mail.com"
+                    required
                   />
                 </div>
-              </div>
-              <div className="p-2 w-full">
-                <div className="relative">
+                <div>
+                  <label
+                    htmlFor="subject"
+                    className="block mb-2 text-sm font-medium text-gray-700  gray-300"
+                  >
+                    Subject
+                  </label>
+
+                  <input
+                    type="text"
+                    name="subject"
+                    id="subject"
+                    className="block p-3 w-full text-sm text-gray-700  rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500    "
+                    placeholder="Let us know how can i help you"
+                    required
+                  />
+                </div>
+                <div className="sm:col-span-2">
                   <label
                     htmlFor="message"
-                    className="leading-7 text-sm text-gray-600"
+                    className="block mb-2 text-sm font-medium text-gray-700  gray-400"
                   >
-                    Message
+                    Your message
                   </label>
+
                   <textarea
-                    id="message"
+                    id="email_body"
                     name="message"
-                    className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                    rows="6"
+                    className="block p-2.5 w-full text-sm text-gray-700 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 "
+                    placeholder="Leave a comment..."
                   ></textarea>
                 </div>
-              </div>
-              <div className="p-2 w-full">
-                <button className="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-                  Send
-                </button>
-              </div>
+                <div className="flex justify-center items-center">
+                  <button className="bg-[#7c51f0] text-white p-4 rounded-lg text-xl">
+                    Submit
+                  </button>
+                </div>
+              </form>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </section>
+        </motion.div>
+      </motion.section>
+    </>
   );
 };
 
-export default Contact;
+export default Form;
